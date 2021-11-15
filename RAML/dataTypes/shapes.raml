@@ -1,0 +1,220 @@
+#%RAML 1.0 Library
+
+usage: Data shapes for the HTTP API
+
+types:
+  Error:
+    properties:
+      error_message: string
+
+  UserData:
+    properties:
+      id: string
+      email: string
+      password: string
+      phone_number: string
+      user_type:
+        type: string
+        enum: [is_serviceprovider, is_advertiser, is_serviceconsumer]
+      date_of_birth:
+        type: date-only
+        example: 1980-05-24
+      nationality: string
+      city: string
+
+
+  AddressData:
+    properties:
+      address_country: string
+      address_city: string
+      address_region: string
+      postal_code: string
+      address_street: string
+      latitude: number
+      longitude: number
+
+  SalonData:
+    properties:
+      id: string
+      owner: UserData
+      business_name: string
+      business_type: string
+      business_description: string
+      business_phone_number: string
+      business_email: string
+      business_address: AddressData
+      price_range: string
+      created: datetime
+
+  NewSalonRequestData:
+    properties:
+      owner: UserData
+      business_name: string
+      business_type: string
+      business_description: string
+      business_phone_number: string
+      business_email: string
+      business_address: AddressData
+      price_range: string
+      created: datetime
+
+  SalonPatchData:
+    properties:
+      owner: UserData
+      business_name: string
+      business_name: string
+      business_type: string
+      business_description: string
+      business_phone_number: string
+      business_email: string
+      business_address: AddressData
+
+  SalonServiceCategoryData:
+    properties:
+      id: string
+      owner: UserData
+      category_name: string
+      category_description: string
+      created: datetime
+
+  SalonServiceCategoryPathData:
+    properties:
+      owner: UserData
+      category_name: string
+      category_description: string
+      created: datetime
+
+
+  NewSalonServiceCategoryData:
+    properties:
+      owner: UserData
+      category_name: string
+      category_description: string
+      created: datetime
+
+  SalonServiceCancellationReasonData:
+    properties:
+      id: string
+      owner: UserData
+      cancellation_reason: string
+      added_date: datetime
+
+  SalonServicesData:
+    properties:
+      id: string
+      owner: UserData
+      service_name: string
+      service_category: SalonServiceCategoryData
+      linked_business: SalonData
+      service_price: number
+      service_duration: string
+
+  CreateUpateSalonServiceData:
+    properties:
+      owner: UserData
+      service_category: SalonServiceCategoryData
+      linked_business: SalonData
+      service_price: number
+      service_duration: string
+
+  SalonOperationDaysData:
+    properties:
+      id: string
+      owner: UserData
+      linked_business: SalonData
+      day_of_week: string
+      start_time: time-only
+      end_time: time-only
+
+  SalonCustomerData:
+    properties:
+      id: string
+      first_name: string
+      last_name: string
+      gender:
+        type: string
+        enum: ['Male', 'Female', 'Non-Binary']
+      DOB: date-only
+      home_address: string
+      registered_by: UserData
+      salon_branch: SalonData
+      created: datetime
+
+  SalonStylistData:
+    properties:
+      id: string
+      owner: UserData
+      first_name: string
+      last_name: string
+      phone_number: string
+      email: string
+      salon_service: SalonServicesData
+      salon_branch: SalonData
+      working_days: SalonOperationDaysData
+      date_joined: datetime
+
+  SalonOnsiteBookingsData:
+    properties:
+      id: string
+      salon_customer: SalonCustomerData
+      booked_in_by: UserData
+      stylists: SalonStylistData
+      booked_service: SalonServicesData
+      booking_creation_date: datetime
+      service_date: datetime
+      service_started: boolean
+      service_completed: boolean
+      service_cancelled: boolean
+      cancellation_reason: SalonServiceCancellationReasonData
+      multiple_stylists_assigned: boolean
+      negotiate_service_price: boolean
+      negotiated_price: number
+
+  SalonOnsiteBookingsPaymentsData:
+    properties:
+      id: string
+      salon: SalonData
+      payment_received_by: UserData
+      service_paid_for: SalonServicesData
+      payment_option:
+        type: string
+        enum: ['Cash', 'Card', 'Mobile']
+      payment_code: string
+      payment_date: datetime
+
+  SalonOnlineBookingsData:
+    properties:
+      id: string
+      first_name: string
+      last_name: string
+      customer: UserData
+      phone_number: string
+      booking_notes: string
+      payment_option:
+        type: string
+        enum: ['Cash on site', 'Card', 'Mobile']
+      paid: boolean
+      total_amount: number
+      booking_code: string
+      created: datetime
+
+  SalonOnlineBookedServiceData:
+    properties:
+      id: string
+      service_booking_group: SalonOnlineBookingsData
+      service_booked: SalonServicesData
+      service_date: datetime
+      price:
+        type: number
+        minimum: 0.0
+        maximum: 1000000.00
+        format: double
+      quantity:
+        type: integer
+        minimum: 1
+        maximum: 5
+        format: int8
+      customer_service_cancel: boolean
+      service_cancelled: boolean
+      service_completed: boolean
+      cancellation_reason: SalonServiceCancellationReasonData

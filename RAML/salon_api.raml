@@ -1,0 +1,269 @@
+#%RAML 1.0
+title: Salon API
+version: 1
+baseUri: http://localhost:8000/api/{version}
+mediaType: application/json
+
+uses:
+  shapes: ./dataTypes/shapes.raml
+
+traits:
+  contentCacheable: !include ./traits/content-cacheable.raml
+  secured: !include ./traits/secured.raml
+  pageable: !include  ./traits/pageable.raml
+
+resourceTypes:
+  collection: !include ./resourceTypes/collection.raml
+  booking: !include ./resourceTypes/booking.raml
+  salon: !include ./resourceTypes/salon.raml
+  customer: !include ./resourceTypes/customer.raml
+  stylist: !include ./resourceTypes/salon.raml
+  service_category: !include ./resourceTypes/service-category.raml
+  service: !include ./resourceTypes/services.raml
+
+securedBy: [oauth_2_0]
+securitySchemes:
+  oauth_2_0: !include ./securitySchemes/oauth_2_0.raml
+
+/salons:
+  type:  { collection: {response-type : shapes.SalonData[], request-type : shapes.NewSalonRequestData } }
+  get:
+    is: [pageable]
+    responses:
+      200:
+        body:
+          application/json:
+            example:|
+              {
+                "salons": [
+                {
+                  "id": "6ddfty-078rty-8986533gh",
+                  "business_name": "Salon Star"
+                },
+                {
+                  "id": "4567-dfgty-4456789ft",
+                  "business_name": "Happy Paradise"
+                }
+                {
+                  "id": "t678-3456-6789hgyt",
+                  "business_name": "Women Heaven"
+                }
+                ]
+              }
+
+  post:
+    is: [secured]
+    description: |
+      salon data created correctly for a salon
+    queryParameters:
+      access_token: string
+      business_name: string
+      business_type: string
+      business_description: string
+      business_phone_number: string
+      business_email: string
+    body:
+      type: shapes.NewSalonRequestData
+    responses:
+      200:
+        body:
+          application/json:
+            example: |
+              {"message": " New Salon created successfully!"}
+
+  /{salon_id}:
+    type:
+       {
+       salon:
+         {
+         get-response-type : shapes.SalonData,
+         get-response-example :
+           id: "uuid-4567-hgyt78-345fgtyr"
+           owner:
+             id: "uuid-4567-ghyt-2345tyu"
+             email: "taruki@salonstar.com"
+             phone_number: "076785678"
+             user_type: "is_serviceprovider"
+             nationality: "Japanese"
+             city: "Tokyo"
+           business_name: "Salon Star"
+           business_type: "Hair Salon"
+           business_description: "Hair haven"
+           business_phone_number: "0786456456"
+           business_email: "hello@salonstar.com"
+           business_address:
+             address_country: "Japan"
+             address_city: "Tokyo"
+             address_region: "Kanto"
+             postal_code: "184-00003"
+             address_street: "2-34-45 Chuo-ku"
+             longitude: "139.4567"
+             latitude: "35.672"
+          ,
+         patch-response-type : shapes.SalonPatchData
+          }
+        }
+      uriParameters:
+        salon_id: string
+
+    delete:
+      description: Delete a salon by id
+      responses:
+        204:
+        404:
+          body:
+            application/json:
+              type: shapes.Error
+              example: {"error_message": "Not found"}
+
+/salon-services-categories:
+  type: { collection: {response-type : shapes.SalonServicesCategoryData[], request-type : shapes.NewSalonServiceCategoryData}}
+  is: [secured]
+  get:
+    is: [pageable]
+    responses:
+      200:
+        body:
+          application/json:
+            example:|
+              {
+                "salons": [
+                {
+                  "id": "6ddfty-078rty-8986533gh",
+                  "business_name": "Salon Star"
+                },
+                {
+                  "id": "4567-dfgty-4456789ft",
+                  "business_name": "Happy Paradise"
+                }
+                {
+                  "id": "t678-3456-6789hgyt",
+                  "business_name": "Women Heaven"
+                }
+                ]
+              }
+
+  post:
+    description: salon services category created successfully
+    body:
+      application/json:
+        type: shapes.NewSalonServiceCategoryData
+
+  /{category_id}:
+    type:
+       {
+       service_category:
+         {
+         get-response-type : shapes.SalonServiceCategoryData,
+         get-response-example :
+           id: "uuid-6756-rtyt78-345f67yr"
+           owner:
+             id: "uuid-4567-ghyt-2345tyu"
+             email: "taruki@salonstar.com"
+             phone_number: "076785678"
+             user_type: "is_serviceprovider"
+             nationality: "Japanese"
+             city: "Tokyo"
+           category_name: "Hair"
+           category_description: "Hair Services"
+           created: "2021-10-09 8:00 A.M"
+          ,
+         patch-response-type : shapes.SalonServiceCategoryPathData
+          }
+        }
+      uriParameters:
+        id: string
+
+    delete:
+      description: Delete a salon service category by id
+      responses:
+        204:
+        404:
+          body:
+            application/json:
+              type: shapes.Error
+              example: {"error_message": "Not found"}
+
+/salon-services:
+  type:  { collection: {response-type : shapes.SalonServicesData[], request-type : shapes.NewSalonServiceRequestData } }
+    is: [secured]
+      get:
+        is: [pageable]
+          responses:
+            200:
+              body:
+                application/json:
+                  example:|
+                    {
+                      "salons": [
+                        {
+                          "id": "6ddfty-0987645-yyrt6533gh",
+                          "service_name": "Hair Treatment"
+                        },
+                        {
+                          "id": "5677-dfgty-44ert89ft",
+                          "service_name": "Hair Cut"
+                        }
+                        {
+                          "id": "6768-3456-kh0yu56gyt",
+                          "service_name": "Hair Coloring"
+                        }
+                        ]
+                    }
+  /{service_id}:
+    type:
+      {
+        service:
+          {
+          get-response-type: shapes.SalonServicesData,
+          get-response-example:
+            id: "4567-ert5-tyu7645dfg89"
+            owner:
+              id: "uuid-4567-ghyt-2345tyu"
+              email: "taruki@salonstar.com"
+              phone_number: "076785678"
+              user_type: "is_serviceprovider"
+              nationality: "Japanese"
+              city: "Tokyo"
+            service_name: "Hair Styling"
+            service_category: "Hair Services"
+            linked_business:
+              id: "uuid-4567-hgyt78-345fgtyr"
+              owner:
+                id: "uuid-4567-ghyt-2345tyu"
+                email: "taruki@salonstar.com"
+                phone_number: "076785678"
+                user_type: "is_serviceprovider"
+                nationality: "Japanese"
+                city: "Tokyo"
+              business_name: "Salon Star"
+              business_type: "Hair Salon"
+              business_description: "Hair haven"
+              business_phone_number: "0786456456"
+              business_email: "hello@salonstar.com"
+              business_address:
+                address_country: "Japan"
+                address_city: "Tokyo"
+                address_region: "Kanto"
+                postal_code: "184-00003"
+                address_street: "2-34-45 Chuo-ku"
+                longitude: "139.4567"
+                latitude: "35.672"
+            service_price: "10,000"
+            service_duration: "1 hour"
+            ,
+            patch-response-type: shapes.CreateUpdateSalonServiceData
+          }
+
+      }
+    uriParameters:
+      id: string
+    delete:
+      description: Delete a salon service by id
+      responses:
+        204:
+        404:
+          body:
+            application/json:
+              type: shapes.Error
+              example: {"error_message": "Not found"}
