@@ -1,2 +1,3 @@
 ./case_study_sources/salonapi/__pycache__
 ./case_study_sources/main_app/__pycache__
+*.pyc
