@@ -15,7 +15,7 @@ types:
       phone_number: string
       user_type:
         type: string
-        enum: [is_serviceprovider, is_advertiser, is_serviceconsumer]
+        enum: [is_serviceprovider, is_serviceconsumer]
       date_of_birth:
         type: date-only
         example: 1980-05-24
@@ -112,6 +112,7 @@ types:
   CreateUpateSalonServiceData:
     properties:
       owner: UserData
+      service_name: string
       service_category: SalonServiceCategoryData
       linked_business: SalonData
       service_price: number
@@ -140,6 +141,18 @@ types:
       salon_branch: SalonData
       created: datetime
 
+  UpdateSalonCustomerData:
+    properties:
+      first_name: string
+      last_name: string
+      gender:
+        type: string
+        enum: ['Male', 'Female', 'Non-Binary']
+      DOB: date-only
+      home_address: string
+      registered_by: UserData
+      salon_branch: SalonData
+
   SalonStylistData:
     properties:
       id: string
@@ -166,6 +179,22 @@ types:
       service_completed: boolean
       service_cancelled: boolean
       cancellation_reason: SalonServiceCancellationReasonData
+      multiple_stylists_assigned: boolean
+      negotiate_service_price: boolean
+      negotiated_price: number
+
+  UpdateSalonOnsiteBookingsData:
+    properties:
+      salon_customer: SalonCustomerData
+      booked_in_by: UserData
+      stylists: SalonStylistData
+      booked_service: SalonServicesData
+      booking_creation_date: datetime
+      service_date: datetime
+      service_started: boolean
+      service_completed: boolean
+      service_cancelled: boolean
+      cancellation_reason?: SalonServiceCancellationReasonData
       multiple_stylists_assigned: boolean
       negotiate_service_price: boolean
       negotiated_price: number

@@ -1,0 +1,25 @@
+<?xml version='1.0'?>
+<adtree>
+	<node refinement="conjunctive">
+		<label>API priviledge abuse</label>
+		<node refinement="conjunctive">
+			<label>Salon customer authenticates
+and login to salon&apos;s API client
+application</label>
+		</node>
+		<node refinement="conjunctive">
+			<label>Salon customer perform
+interactions on priviledged
+Salon API endpoints</label>
+		</node>
+		<node refinement="conjunctive" switchRole="yes">
+			<label>Assign user priviledges to
+user IDs not authentication
+information</label>
+			<node refinement="conjunctive">
+				<label>Enforce role based access when interacting with
+priviledged salon API end points</label>
+			</node>
+		</node>
+	</node>
+</adtree>

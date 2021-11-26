@@ -1,0 +1,79 @@
+<?xml version='1.0'?>
+<adtree>
+	<node refinement="disjunctive">
+		<label>API Session
+Hijacking</label>
+		<node refinement="conjunctive">
+			<label>Attacker establishes session
+with an API server using a
+predictable session ID &apos;XXX&apos;</label>
+			<node refinement="conjunctive">
+				<label>Legitimate user
+authenticates and
+establishes an API connection
+with session ID &apos;XXX&apos;</label>
+			</node>
+			<node refinement="conjunctive">
+				<label>Attacker predicts user&apos;s
+session ID &apos;XXX&apos;</label>
+			</node>
+			<node refinement="conjunctive">
+				<label>Attacker authenticates to
+the API server</label>
+			</node>
+		</node>
+		<node refinement="conjunctive">
+			<label>Attacker establishes session
+with the salon API server using
+session ID &apos;YYY&apos; obtained
+via client side XSS attack</label>
+			<node refinement="conjunctive">
+				<label>Attacker obtains victim&apos;s
+session ID &apos;YYY&apos; via
+client side XSS attack</label>
+				<node refinement="conjunctive">
+					<label>Attacker sends malicious
+link to the salon API user</label>
+				</node>
+				<node refinement="conjunctive">
+					<label>Victim salon API user clicks
+at the malicious link</label>
+				</node>
+				<node refinement="conjunctive">
+					<label>Victim salon API user
+is authenticated and has
+an active session with the
+salon API using session ID &apos;YYY&apos;</label>
+				</node>
+			</node>
+			<node refinement="conjunctive">
+				<label>Attacker authenticates to
+the salon API Server</label>
+			</node>
+		</node>
+		<node refinement="disjunctive" switchRole="yes">
+			<label>Use mechanism such as Oauth for the
+salon API authentication and session
+management</label>
+			<node refinement="disjunctive">
+				<label>Correctly configure Oauth</label>
+			</node>
+			<node refinement="disjunctive">
+				<label>Implement Session Timeouts</label>
+			</node>
+			<node refinement="disjunctive">
+				<label>Require provision of an access
+token to every salon API requests to
+protected resources</label>
+			</node>
+			<node refinement="disjunctive">
+				<label>Use functions that generate
+random session IDs with
+zero collissions</label>
+			</node>
+			<node refinement="disjunctive" switchRole="yes">
+				<label>Wrong Oauth configuration</label>
+			</node>
+		</node>
+	</node>
+</adtree>

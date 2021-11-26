@@ -1,0 +1,58 @@
+<?xml version='1.0'?>
+<adtree>
+	<node refinement="disjunctive">
+		<label>Impersonate API User</label>
+		<node refinement="conjunctive">
+			<label>Admin access user&apos;s
+clear text password or
+static authenticator</label>
+			<node refinement="conjunctive">
+				<label>Admin access
+a user&apos;s account</label>
+			</node>
+			<node refinement="conjunctive">
+				<label>Admin resets
+user&apos;s
+password/static
+authenticator</label>
+			</node>
+		</node>
+		<node refinement="conjunctive">
+			<label>Admin access user&apos;s
+clear text password or
+static authenticator</label>
+			<node refinement="conjunctive">
+				<label>Admin receives user&apos;s
+request for password
+reset</label>
+			</node>
+			<node refinement="conjunctive">
+				<label>Admin resets user&apos;s
+password/static authenticator</label>
+			</node>
+			<node refinement="conjunctive">
+				<label>API user sends
+admin
+request for
+password reset</label>
+			</node>
+		</node>
+		<node refinement="disjunctive" switchRole="yes">
+			<label>Make admins send password
+reset links to users instead of
+manually resetting password</label>
+			<node refinement="disjunctive">
+				<label>Force password change
+during 1st login</label>
+			</node>
+			<node refinement="disjunctive">
+				<label>Log all API&apos;s
+authentication request actions</label>
+			</node>
+			<node refinement="disjunctive">
+				<label>Store authentication logs
+in security audit file</label>
+			</node>
+		</node>
+	</node>
+</adtree>

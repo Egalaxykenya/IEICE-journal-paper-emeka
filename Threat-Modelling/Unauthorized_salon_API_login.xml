@@ -1,0 +1,25 @@
+<?xml version='1.0'?>
+<adtree>
+	<node refinement="conjunctive">
+		<label>Unauthorized
+Salon API Login</label>
+		<node refinement="conjunctive">
+			<label>Attacker steals salon
+user login API credentials</label>
+		</node>
+		<node refinement="conjunctive">
+			<label>Attacker accesses API
+resources using stolen
+user&apos;s access credentials</label>
+		</node>
+		<node refinement="conjunctive" switchRole="yes">
+			<label>Record salon users last login information
+and IP address</label>
+			<node refinement="conjunctive">
+				<label>Display user&apos;s last login
+information in post-login
+API homepage/screen</label>
+			</node>
+		</node>
+	</node>
+</adtree>
