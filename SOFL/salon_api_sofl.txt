@@ -1,0 +1,157 @@
+/* SOFL Formal specifications for Salon API project */
+/* Begin class declarations */
+
+class UserType;
+type
+type_of_user = {<SALONOWNER>, <SALONCUSTOMER>}
+
+var
+user_type: type_of_user
+
+method Init()
+post user_type = nil
+
+end_method;
+
+method is_salonOwner(user: string) result: string
+post user inset user_type and result = <SALONOWNER>
+end_method;
+
+method is_salonCustomer(user_type: userType) result: string
+post user inset user_type and result = <SALONCUSTOMER>
+end_method;
+
+
+end_class;
+
+
+class SalonUser / UserType;
+/* class SalonUser inherits UserType */
+
+type
+Year = string;
+Month = string;
+Day = string;
+DOB = Year * Month * Day;
+
+
+var
+id: string
+email: string
+password: string
+date_of_birth: DOB
+nationality: string
+city: string
+
+inv
+
+len(id) == 36; /* define ids as of standard UUID string type with length of 36 characters *
+
+
+method Init()
+post id = nil and email = nil and password = nil and date_of_birth = nil
+  and nationality = nil and city = nil
+end_method;
+
+end_class;
+
+class Price;
+
+var
+service_price: nat0
+
+inv
+0 < service_price <= 1000000
+method Init()
+  post service_price = 0
+end_method;
+
+method validPrice(service_price: nat0) service_price: nat0
+  post (exists[x: nat0] | 0 < x <= 100000 and service_price = x)
+end_method;
+
+end_class;
+
+/* End class declarations */
+
+
+module Salon_API;
+
+type
+Year = string;
+Month = string;
+Day = string;
+DOB = Year * Month * Day;
+
+hour = string;
+minutes = string;
+token = string;
+
+Timestamp = Year * Month * Day * hour * minutes;
+
+AddressData = composed of
+                address_country = string
+                address_city = string
+                address_region = string
+                postal_code = string
+                address_street = string
+                latitude = nat0
+                longitude = nat0
+              end;
+
+
+SalonData = composed of
+              id = string
+              owner = SalonUser
+              business_name = string
+              business_type = string
+              business_description = string
+              business_phone_number = string
+              business_email = string
+              business_address = AddressData
+              price_range = string
+              created = Timestamp
+            end;
+
+SalonTable = seq of SalonData;
+
+
+var
+
+/* External data store for salon records */
+salons_table: SalonTable
+
+inv
+
+forall[i,j: inds(salons_table)] | i <> j => salons_table(i).id <> salons_table(j).id;
+
+
+
+process RetrieveSalon(id:string) salon: SalonData
+ext rd salons_table
+pre exists[i:inds(salons_table)] | salons_table(i).id = id
+post exists![i:inds(salons_table)] | salons_table(i).id = id and salon = salons_table(i)
+
+end_process;
+
+process AddSalon(access_token:token, salon: SalonData) response_message: string
+ext wr salons_table
+/* Pre condition: Access token must be provided and id of new salon must be unique */
+pre elems(access_token) <> {} and not exists[i:inds(salon_table)] | salons_table(i).id = salon.id
+post salons_table = conc(~salons_table, [salon]) and response_message = "200 OK, New salon added successfully"
+
+end_process;
+
+process DeleteSalon(access_token:token, id: string) response_message: string
+ext wr salons_table
+pre exists[i:inds(salons_table)] | salons_table(i).id = id and elems(access_token) <> {}
+post ((exists![i:inds(salons_table)] | salons_table(i).id = id and ~salons_table = conc(salons_table, [salons_table(i).id])
+    and response_message="200 OK, Salon deleted successfully"))
+      or not exists![i:inds(salon_table)] | salons_table(i).id = id and response_message = "404, salon not found"
+
+comment
+This process removes a salon with the provided id if it exists in the salon_table which is reflected by defining
+the initial salons_table as a concatenation of the final salons_table and the
+sequence composed of a composite salon object with the supplied id
+
+end_process;
