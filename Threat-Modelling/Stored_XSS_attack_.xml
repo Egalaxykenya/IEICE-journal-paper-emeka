@@ -1,11 +1,10 @@
 <?xml version='1.0'?>
 <adtree>
 	<node refinement="conjunctive">
-		<label>[Stored XSS attack
-]</label>
+		<label>Stored XSS attack</label>
 		<node refinement="conjunctive">
 			<label>BioDescription
-Interptreted as DOM</label>
+Interpreted as DOM</label>
 			<node refinement="conjunctive">
 				<label>API stores BioProfile
 with malicious XSS
@@ -26,7 +25,7 @@ payload</label>
 				<label>API collects stored
 BioProfile data</label>
 			</node>
-			<node refinement="conjunctive">
+			<node refinement="disjunctive">
 				<label>Malicious user
 views BioDescription
 with malicious XSS Payload</label>
