@@ -115,18 +115,39 @@ SalonData = composed of
 
 SalonTable = seq of SalonData;
 
+SalonServiceCategoryData = composed of
+                            id = string
+                            owner = SalonUser
+                            category_name = string
+                            created = Timestamp
+                          end;
+
+SalonServiceData = composed of
+                    id = string
+                    owner = SalonUser
+                    service_category = SalonServiceCategoryData
+                    linked_business = SalonData
+                    service_price = Price
+                    service_duration = string
+                    service_name = string
+                  end;
+
+SalonServiceTable = seq of SalonServiceData
+
 
 var
 
 /* External data store for salon records */
 salons_table: SalonTable
+salon_services: SalonServiceTable
 
 inv
 
 forall[i,j: inds(salons_table)] | i <> j => salons_table(i).id <> salons_table(j).id;
+forall[i,j: inds(salon_services)] | i <> j => salons_services(i).id <> salons_services(j).id;
 
 
-
+ 
 process RetrieveSalon(id:string) salon: SalonData
 ext rd salons_table
 pre exists[i:inds(salons_table)] | salons_table(i).id = id

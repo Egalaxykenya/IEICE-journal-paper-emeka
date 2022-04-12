@@ -1,0 +1,53 @@
+<?xml version='1.0'?>
+<adtree>
+	<node refinement="conjunctive">
+		<label>Stored XSS on
+Salon Service
+Description</label>
+		<node refinement="conjunctive">
+			<label>Service category description
+interpreted as DOM</label>
+			<node refinement="conjunctive">
+				<label>API recieves and stores
+data from malicious user</label>
+				<node refinement="conjunctive">
+					<label>Malicious user
+registers a salon account</label>
+				</node>
+				<node refinement="conjunctive">
+					<label>Malicious user
+registers a salon business
+profile</label>
+				</node>
+				<node refinement="conjunctive">
+					<label>Malicious user
+creates a salon service
+category</label>
+				</node>
+				<node refinement="conjunctive">
+					<label>Malicious user creates
+a salon service category
+description with malicious XSS
+payload</label>
+				</node>
+			</node>
+			<node refinement="conjunctive">
+				<label>API collects stored
+service category
+description with malicious XSS
+payload</label>
+			</node>
+			<node refinement="conjunctive">
+				<label>Malicious user views
+stored service category
+description with malicious XSS
+payload</label>
+			</node>
+		</node>
+		<node refinement="conjunctive" switchRole="yes">
+			<label>Regex operation to
+sanitize salon service
+description text</label>
+		</node>
+	</node>
+</adtree>

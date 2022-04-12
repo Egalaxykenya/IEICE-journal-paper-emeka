@@ -1,0 +1,34 @@
+<?xml version='1.0'?>
+<adtree>
+	<node refinement="conjunctive">
+		<label>Negative service
+quantity booking</label>
+		<node refinement="conjunctive">
+			<label>User completes
+service booking</label>
+			<node refinement="conjunctive">
+				<label>User logs in to salon
+booking system</label>
+				<node refinement="conjunctive">
+					<label>User creates an
+account in salon
+booking system</label>
+				</node>
+			</node>
+			<node refinement="conjunctive">
+				<label>User searches for a
+service to book</label>
+			</node>
+			<node refinement="conjunctive">
+				<label>User books service
+and adds negative quantity</label>
+			</node>
+		</node>
+		<node refinement="conjunctive" switchRole="yes">
+			<label>Use domain primitive that
+strictly defines a correct
+service quantity in context
+of OSBS</label>
+		</node>
+	</node>
+</adtree>

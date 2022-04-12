@@ -1,0 +1,36 @@
+<?xml version='1.0'?>
+<adtree>
+	<node refinement="conjunctive">
+		<label>User access control
+violation</label>
+		<node refinement="conjunctive">
+			<label>Salon customer
+modifies salon&apos;s
+business profile</label>
+			<node refinement="conjunctive">
+				<label>Salon customer logs
+into salon booking system</label>
+				<node refinement="conjunctive">
+					<label>Salon customer creates
+an account in salon booking
+system</label>
+				</node>
+			</node>
+			<node refinement="conjunctive">
+				<label>Salon customer
+requests API to view
+salon business profile</label>
+			</node>
+			<node refinement="conjunctive">
+				<label>Salon customer
+edits salon business
+profile</label>
+			</node>
+		</node>
+		<node refinement="conjunctive" switchRole="yes">
+			<label>Implement access controls
+that strictly defines allowable actions
+of salon owners and salon customers</label>
+		</node>
+	</node>
+</adtree>

@@ -1,0 +1,41 @@
+<?xml version='1.0'?>
+<adtree>
+	<node refinement="conjunctive">
+		<label>[Stored XSS attack
+]</label>
+		<node refinement="conjunctive">
+			<label>BioDescription
+Interptreted as DOM</label>
+			<node refinement="conjunctive">
+				<label>API stores BioProfile
+with malicious XSS
+payload</label>
+				<node refinement="conjunctive">
+					<label>Malicious user
+registers a salon
+account</label>
+				</node>
+				<node refinement="conjunctive">
+					<label>Malicious user
+updates BioProfile
+with malicious XSS
+payload</label>
+				</node>
+			</node>
+			<node refinement="conjunctive">
+				<label>API collects stored
+BioProfile data</label>
+			</node>
+			<node refinement="conjunctive">
+				<label>Malicious user
+views BioDescription
+with malicious XSS Payload</label>
+			</node>
+		</node>
+		<node refinement="conjunctive" switchRole="yes">
+			<label>Regex operation
+to sanitize
+BioDescription Input</label>
+		</node>
+	</node>
+</adtree>
