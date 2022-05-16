@@ -172,7 +172,7 @@ class SalonOnsiteBooking(models.Model):
     multiple_stylists_assigned = models.BooleanField(default=False)
     stylists = models.ManyToManyField(SalonStylist)
     negotiate_service_price = models.BooleanField(default=False)
-    negoriated_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True)
+    negotiated_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True)
 
     class Meta:
         ordering = ('-creation_date',)
