@@ -45,6 +45,7 @@ types:
       business_address: AddressData
       price_range: string
       created: datetime
+      stylist: SalonStylistData[]
 
   NewSalonRequestData:
     properties:
@@ -171,7 +172,7 @@ types:
       id: string
       salon_customer: SalonCustomerData
       booked_in_by: UserData
-      stylists: SalonStylistData
+      stylists:  SalonStylistData
       booked_service: SalonServicesData
       booking_creation_date: datetime
       service_date: datetime

@@ -71,7 +71,7 @@ securitySchemes:
             example: |
               {"message": " New Salon created successfully!"}
 
-  /{salon_id}:
+/salons/{salon_id}:
     type:
        {
        salon:
@@ -116,7 +116,7 @@ securitySchemes:
               type: shapes.Error
               example: {"error_message": "Not found"}
 
-/salon-services-categories:
+/salons/salon-services-categories:
   type: { collection: {response-type : shapes.SalonServicesCategoryData[], request-type : shapes.NewSalonServiceCategoryData}}
   is: [secured]
   get:
@@ -149,7 +149,7 @@ securitySchemes:
       application/json:
         type: shapes.NewSalonServiceCategoryData
 
-  /{category_id}:
+/salons/salon-services-categories/{category_id}:
     type:
        {
        service_category:
@@ -179,7 +179,7 @@ securitySchemes:
               type: shapes.Error
               example: {"error_message": "Not found"}
 
-/salon-services:
+/salons/salon-services:
   type:  { collection: {response-type : shapes.SalonServicesData[], request-type : shapes.CreateUpdateSalonServiceData } }
     is: [secured]
       get:
@@ -225,7 +225,7 @@ securitySchemes:
                 example: |
                   {"message": " New Service created successfully!"}
 
-  /{service_id}:
+/salons/salon-services/{service_id}:
     type:
       {
         service:
@@ -273,7 +273,7 @@ securitySchemes:
               type: shapes.Error
               example: {"error_message": "Not found"}
 
-/customers:
+/salons/customers:
   type:  { collection: {response-type : shapes.SalonCustomerData[], request-type : shapes.SalonCustomerData } }
   is: [secured]
     get:
@@ -324,7 +324,7 @@ securitySchemes:
                     example: |
                       {"message": " New customer created successfully!"}
 
-  /{salon_id}/{customer_id}:
+  /salons/{salon_id}/customers/{customer_id}:
     type:
       {
         customer:
@@ -377,7 +377,7 @@ securitySchemes:
               example: {"error_message": "Not found"}
 
 
-/bookings:
+/salons/bookings:
   type:  { collection: {response-type : shapes.SalonOnsiteBookingsData[], request-type : shapes.SalonOnsiteBookingsData } }
   is: [secured]
     get:
@@ -428,7 +428,7 @@ securitySchemes:
                     example: |
                       {"message": " New booking created successfully!"}
 
-  /{salon_id}/{booking_id}:
+  /salons/{salon_id}/bookings/{booking_id}:
     type:
       {
         booking:
@@ -475,8 +475,7 @@ securitySchemes:
               type: shapes.Error
               example: {"error_message": "Not found"}
 
-
-/stylists:
+/salons/stylists:
   type:  { collection: {response-type : shapes.SalonStylistData[], request-type : shapes.SalonStylistData } }
   is: [secured]
     get:
@@ -527,7 +526,7 @@ securitySchemes:
                     example: |
                       {"message": " New stylis created successfully!"}
 
-  /{salon_id}/{stylist_id}:
+/salons/{salon_id}/stylists/{stylist_id}:
     type:
       {
         stylist:

@@ -20,6 +20,8 @@ class UserSerializer(serializers.ModelSerializer):
         'username',
     )
 class SalonSerializer(serializers.ModelSerializer):
+    owner = UserSerializer()
+
     class Meta:
         model = Salon
         fields = (
@@ -39,6 +41,7 @@ class SalonSerializer(serializers.ModelSerializer):
         )
 
 class SalonUserSerializer(serializers.ModelSerializer):
+    
     class Meta:
         model = SalonUser
         fields = (
@@ -51,6 +54,8 @@ class SalonUserSerializer(serializers.ModelSerializer):
         )
 
 class SalonServiceCategory(serializers.ModelSerializer):
+    owner = UserSerializer()
+    
     class Meta:
         model = ServiceCategory
         fields = (
@@ -60,6 +65,9 @@ class SalonServiceCategory(serializers.ModelSerializer):
         )
 
 class SalonServiceSerializer(serializers.ModelSerializer):
+    owner = UserSerializer()
+    service_category = SalonServiceCategory()
+    
     class Meta:
         model =  SalonService
         fields = (
@@ -71,7 +79,25 @@ class SalonServiceSerializer(serializers.ModelSerializer):
             'service_duration',
         )
 
+class SalonOperationDaysSerializer(serializers.ModelSerializer):
+    linked_business = SalonSerializer()
+    
+    class Meta:
+        model = SalonOperationDays
+        fields = (
+            'linked_business',
+            'day_of_week',
+            'start_time',
+            'end_time',
+        )
+
+
+
 class SalonStylistSerializer(serializers.ModelSerializer):
+    owner = UserSerializer()
+    salon_services = SalonServiceSerializer()
+    working_days = SalonOperationDaysSerializer()
+    
     class Meta:
         model = SalonStylist
         fields = (
@@ -88,6 +114,9 @@ class SalonStylistSerializer(serializers.ModelSerializer):
         )
 
 class SalonOperationDaysSerializer(serializers.ModelSerializer):
+    owner = UserSerializer()
+    linked_business = SalonSerializer()
+    
     class Meta:
         model = SalonOperationDays
         fields = (
@@ -101,6 +130,9 @@ class SalonOperationDaysSerializer(serializers.ModelSerializer):
 
 
 class SalonCustomerSerializer(serializers.ModelSerializer):
+    registered_by = UserSerializer()
+    salon_branch = SalonSerializer()
+    
     class Meta:
         model = SalonCustomer
         fields = (
@@ -113,6 +145,11 @@ class SalonCustomerSerializer(serializers.ModelSerializer):
         )
 
 class SalonOnsiteBookingSerializer(serializers.ModelSerializer):
+    stylists = SalonStylistSerializer()
+    booked_service = SalonServiceSerializer()
+    booked_in_by = UserSerializer()
+    salon_customer = SalonCustomerSerializer()
+    
     class Meta:
         model = SalonOnsiteBooking
         fields = (
@@ -130,6 +167,8 @@ class SalonOnsiteBookingSerializer(serializers.ModelSerializer):
         )
 
 class SalonOnsiteBookingPaymentSerializer(serializers.ModelSerializer):
+    salon = SalonSerializer()
+
     class Meta:
         model = SalonOnsiteBookingPayment
         fields = (

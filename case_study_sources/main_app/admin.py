@@ -7,7 +7,9 @@ from .models import (
     SalonStylist,
     SalonOperationDays,
     SalonOnsiteBooking,
-    SalonOnsiteBookingPayment
+    SalonOnsiteBookingPayment,
+    ServiceCategory,
+    CancellationReason,
     )
 
 admin.site.register(SalonUser)
@@ -17,3 +19,6 @@ admin.site.register(SalonStylist)
 admin.site.register(SalonOperationDays)
 admin.site.register(SalonOnsiteBooking)
 admin.site.register(SalonOnsiteBookingPayment)
+admin.site.register(SalonService)
+admin.site.register(ServiceCategory)
+admin.site.register(CancellationReason)

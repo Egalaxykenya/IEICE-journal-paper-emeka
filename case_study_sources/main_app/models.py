@@ -168,7 +168,7 @@ class SalonOnsiteBooking(models.Model):
     service_started = models.BooleanField(default=False)
     service_completed = models.BooleanField(default=False)
     service_cancelled = models.BooleanField(default=False)
-    cancellation_reason = models.ForeignKey(CancellationReason, on_delete=models.PROTECT, related_name="cancellation_reasons_bookings")
+    cancellation_reason = models.ForeignKey(CancellationReason, on_delete=models.PROTECT, related_name="cancellation_reasons_bookings", blank=True)
     multiple_stylists_assigned = models.BooleanField(default=False)
     stylists = models.ManyToManyField(SalonStylist)
     negotiate_service_price = models.BooleanField(default=False)
