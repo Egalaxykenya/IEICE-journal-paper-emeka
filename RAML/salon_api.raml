@@ -78,16 +78,16 @@ securitySchemes:
          {
          get-response-type : shapes.SalonData,
          get-response-example :
-           id: "uuid-4567-hgyt78-345fgtyr"
+           id: "uuid-4567-hgyt78-345fgtyr",
            owner:
-             id: "uuid-4567-ghyt-2345tyu"
-             email: "taruki@salonstar.com"
-             phone_number: "076785678"
-             user_type: "is_serviceprovider"
-             nationality: "Japanese"
-             city: "Tokyo"
-           business_name: "Salon Star"
-           business_type: "Hair Salon"
+             id: "uuid-4567-ghyt-2345tyu",
+             email: "taruki@salonstar.com",
+             phone_number: "076785678",
+             user_type: "is_serviceprovider,"
+             nationality: "Japanese",
+             city: "Tokyo",
+           business_name: "Salon Star",
+           business_type: "Hair Salon",
            business_description: "Hair haven"
            business_phone_number: "0786456456"
            business_email: "hello@salonstar.com"
@@ -179,7 +179,7 @@ securitySchemes:
               type: shapes.Error
               example: {"error_message": "Not found"}
 
-/salons/salon-services:
+/salons/salon-services-categories/{category_id}/salon-services:
   type:  { collection: {response-type : shapes.SalonServicesData[], request-type : shapes.CreateUpdateSalonServiceData } }
     is: [secured]
       get:
@@ -225,7 +225,7 @@ securitySchemes:
                 example: |
                   {"message": " New Service created successfully!"}
 
-/salons/salon-services/{service_id}:
+/salons/salon-services-categories/{category_id}/salon-services/{service_id}:
     type:
       {
         service:
@@ -377,7 +377,7 @@ securitySchemes:
               example: {"error_message": "Not found"}
 
 
-/salons/bookings:
+/salons/{salon_id}/bookings:
   type:  { collection: {response-type : shapes.SalonOnsiteBookingsData[], request-type : shapes.SalonOnsiteBookingsData } }
   is: [secured]
     get:

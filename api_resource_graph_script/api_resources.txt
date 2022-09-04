@@ -1,0 +1,11 @@
+/salons
+/salons/users
+/salons/saloncustomers
+/salons/salonoperationdays
+/salons/servicecategories
+/salons/servicecategories/{category_id}/salonservices
+/salons/salonstylists
+/salons/salononsitebookings/{booking_id}/saloncustomers/{customer_id}
+/salons/salononsitebookings/{booking_id}/salononsitebookingspayments/{payment_id}
+/salons/salonstylists/{stylist_id}/salonoperationdays
+/salons/salonstylists/{stylist_id}/salononsitebookings
