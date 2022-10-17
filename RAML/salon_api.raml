@@ -116,7 +116,7 @@ securitySchemes:
               type: shapes.Error
               example: {"error_message": "Not found"}
 
-/salons/salon-services-categories:
+/salons/{salon_id}/salon-services-categories:
   type: { collection: {response-type : shapes.SalonServicesCategoryData[], request-type : shapes.NewSalonServiceCategoryData}}
   is: [secured]
   get:
@@ -149,7 +149,7 @@ securitySchemes:
       application/json:
         type: shapes.NewSalonServiceCategoryData
 
-/salons/salon-services-categories/{category_id}:
+/salons/{salon_id}/salon-services-categories/{category_id}:
     type:
        {
        service_category:
@@ -179,7 +179,7 @@ securitySchemes:
               type: shapes.Error
               example: {"error_message": "Not found"}
 
-/salons/salon-services-categories/{category_id}/salon-services:
+/salons/{salon_id}/salon-services-categories/{category_id}/salon-services:
   type:  { collection: {response-type : shapes.SalonServicesData[], request-type : shapes.CreateUpdateSalonServiceData } }
     is: [secured]
       get:
@@ -225,7 +225,7 @@ securitySchemes:
                 example: |
                   {"message": " New Service created successfully!"}
 
-/salons/salon-services-categories/{category_id}/salon-services/{service_id}:
+/salons/{salon_id}/salon-services/{service_id}:
     type:
       {
         service:
@@ -273,7 +273,7 @@ securitySchemes:
               type: shapes.Error
               example: {"error_message": "Not found"}
 
-/salons/customers:
+/salons/{salon_id}/customers:
   type:  { collection: {response-type : shapes.SalonCustomerData[], request-type : shapes.SalonCustomerData } }
   is: [secured]
     get:
@@ -428,7 +428,7 @@ securitySchemes:
                     example: |
                       {"message": " New booking created successfully!"}
 
-  /salons/{salon_id}/bookings/{booking_id}:
+  /salons/{user_id}/bookings/{booking_id}:
     type:
       {
         booking:
@@ -475,7 +475,7 @@ securitySchemes:
               type: shapes.Error
               example: {"error_message": "Not found"}
 
-/salons/stylists:
+/salons/{salon_id}/stylists:
   type:  { collection: {response-type : shapes.SalonStylistData[], request-type : shapes.SalonStylistData } }
   is: [secured]
     get:
@@ -582,7 +582,7 @@ securitySchemes:
       stylist_id: string
 
     delete:
-      description: Delete a salon stylist booking by id
+      description: Delete a salon stylist by id
       responses:
         204:
         404:
