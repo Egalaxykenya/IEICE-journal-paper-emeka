@@ -232,7 +232,7 @@ post exists![i: inset dom(salons_table)] | i.id = salon_id | i = salon | salons_
                 error_message = "Http 401, Permission Denied, Permission Denied"
                   => len(access_token) = 0
                         and access_token = nil 
-                          and exists![i: inset dom(salons_table)] | i.id = salon_id | salons_table(i) = salonuser
+                          and exists![i: inset dom(salons_table)] | i.id = salon_id | salons_table(i) = salonuser and salonuser.role = <SALONOWNER>
                             and salonuser inset(elems(salon_users_table))
 
 end_process;
@@ -284,6 +284,7 @@ process DeleteSalon(access_token:token, salon_id=string, owner: SalonUser) delet
 /* API resource path: /salons/{salon_id} */
 
 ext wr salons_table
+ext rd salon_users_table
 
 pre exists![i: inset dom(salons_table)] | i.id = salon_id | salons_table(i) = owner and owner.role = <SALONOWNER> 
 post ~salons_table = override(salons_table, {deleted_salon -> owner}) 
@@ -291,14 +292,18 @@ post ~salons_table = override(salons_table, {deleted_salon -> owner})
                       and access_token <> nil 
                         and exists![i: inset dom(~salons_table)] | i.id = salon_id | ~salons_table(i) = owner and owner.role = <SALONOWNER>
                           and deleted_salon.owner = owner
-                            and deleted_salon.id = salon_id
-                              and salons_table <> ~salon_table
-                                and response_status = "Http 200 Ok"
+                            and owner inset elems(salon_users_table)
+                              and owner.role = <SALONOWNER>
+                                and deleted_salon.id = salon_id
+                                  and salons_table <> ~salon_table
+                                    and response_status = "Http 204"
                 or
                  error_message = "Http 401, Permission Denied, Permission Denied"
                   => len(access_token) = 0
                         and access_token = nil
                           and exists![i: inset dom(salons_table)] | i.id = salon_id | salons_table(i) = owner and owner.role = <SALONOWNER> 
+                            and owner inset elems(salon_users_table)
+                              and owner.role = <SALONOWNER>
 
 end_process;
 
@@ -367,7 +372,7 @@ post not exists[i: inds(salon_services_categories)] | salon_services_categories(
                     and salon_services_categories = conc(~salon_services_categories, [deleted_category])
                       and len(salon_services_categories) <> len(~salon_services_categories)
                          and deleted_category.id = category_id
-                            and response_status = "Http 200 Ok")
+                            and response_status = "Http 204")
             or
               error_message = "Http 401, Permission Denied, Permission Denied"
                 => len(access_token) = 0
@@ -470,7 +475,7 @@ post not exists[i: inset dom(single_salon_services)] | i = deleted_service | i.l
                         and deleted_service.id = service_id
                          and salons_table(salon) = salonuser
                            and salonuser.role = <SALONOWNER>
-                            and response_message = "Http 200 Ok"
+                            and response_message = "Http 204"
               or
               error_message = "Http 401, Permission Denied"
                 => len(access_token) = 0
@@ -550,7 +555,7 @@ post salon_customers_table = override(~salon_customers_table, {deleted_customer 
                       and deleted_customer.id = customer_id
                         and salon_customers_table(deleted_customer) = salon
                           and deleted_customer.role = <SALONCUSTOMER>
-                            and response_status = "Http 200"
+                            and response_status = "Http 204"
           or 
             error_message ="Http 401, Permission Denied"
                           => len(access_token) = 0 
@@ -613,7 +618,7 @@ post salon_bookings_table = override(~salon_bookings_table, {deleted_booking -> 
                     and exists[i: inset dom(salon_bookings_table)] | i.id = booking_id | salon_bookings_table(i) = user
                       and salon_bookings_table(deleted_booking) = user
                         and user.role = <SALONCUSTOMER>
-                          and response_status = "Http 200"
+                          and response_status = "Http 204"
             or
             error_message = "Http 401, Permission Denied"
               => len(access_token) = 0
