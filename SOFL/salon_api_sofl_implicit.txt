@@ -209,7 +209,7 @@ explicit
       salon_users_table := union(~salon_users_table, {salonuser})
       response_status := "Http 200 Ok"
     else
-      error_message := "Http 401, Permission Denied, Permission denied"
+      error_message := "Http 401, Permission Denied"
   end
 end_process;
 
@@ -231,7 +231,7 @@ post exists![i: inset dom(salons_table)] | i.id = salon_id | i = salon | salons_
                             and salon.id = salon_id
                               and response_status = "Http 200 Ok"
                 or
-                error_message = "Http 401, Permission Denied, Permission Denied"
+                error_message = "Http 401, Permission Denied"
                   => len(access_token) = 0
                         and access_token = nil
                           and exists![i: inset dom(salons_table)] | i.id = salon_id | salons_table(i) = salonuser and salonuser.role = <SALONOWNER>
@@ -249,7 +249,7 @@ post salons = salons_table
                         and elems(resource_path) <> {}
                           and response_status ="Http 200 Ok"
                  or
-                  error_message = "Http 401, Permission Denied, Permission Denied"
+                  error_message = "Http 401, Permission Denied"
                     => elems(access_token) = {}
                         and access_token = nil
                           and elems(resource_path) <> {}
@@ -274,7 +274,7 @@ post  exists[i: inset dom(salons_table)] | i = added_salon and salons_table(i) =
                                 and salons_table <> ~salons_table
                                   and response_status = "Http 200 Ok"
                 or
-                error_message = "Http 401, Permission Denied, Permission Denied"
+                error_message = "Http 401, Permission Denied"
                   => len(access_token) = 0
                         and access_token = nil
                           and not exists[i: inset dom(salons_table) ] | i = salon  | salons_table(i) = owner and owner.role = <SALONOWNER>
@@ -300,7 +300,7 @@ post ~salons_table = override(salons_table, {deleted_salon -> owner})
                                   and salons_table <> ~salon_table
                                     and response_status = "Http 204"
                 or
-                 error_message = "Http 401, Permission Denied, Permission Denied"
+                 error_message = "Http 401, Permission Denied"
                   => len(access_token) = 0
                         and access_token = nil
                           and exists![i: inset dom(salons_table)] | i.id = salon_id | salons_table(i) = owner and owner.role = <SALONOWNER>
@@ -322,7 +322,7 @@ post salon_services_categories = conc(~salon_services_categories, [category])
                             and len(~salon_services_categories) <> len(salon_services_categories)
                               and response_status = "Http 200 Ok"
                 or
-                error_message = "Http 401, Permission Denied, Permission Denied"
+                error_message = "Http 401, Permission Denied"
                   => len(access_token) = 0
                         and access_token = nil
                           and not exists[i: inds(salon_services_categories)] | salon_services_categories(i).id = category.id
@@ -338,7 +338,7 @@ post service_categories = salon_services_categories
                       and access_token <> nil
                         and response_status = "Http 200"
                 or
-                  error_message = "Http 401, Permission Denied, Permission Denied"
+                  error_message = "Http 401, Permission Denied"
                     => len(access_token) = 0
                           and access_token = nil
 
@@ -356,7 +356,7 @@ post exists[i: inds(salon_services_categories)] | salon_services_categores(i).id
                           and service_category.id = category_id
                             and response_message = "Http 200"
                 or
-                  error_message="Http 401, Permission Denied, Permission Denied"
+                  error_message="Http 401, Permission Denied"
                     => len(access_token) = 0
                           and access_token = nil
                             and exists[i: inds(salon_services_categories)] | salon_services_categores(i).id = category_id
@@ -376,7 +376,7 @@ post not exists[i: inds(salon_services_categories)] | salon_services_categories(
                          and deleted_category.id = category_id
                             and response_status = "Http 204")
             or
-              error_message = "Http 401, Permission Denied, Permission Denied"
+              error_message = "Http 401, Permission Denied"
                 => len(access_token) = 0
                       and access_token = nil
                         and exists![i: inds(salon_services_categories)] | salon_services_categories(i).id = category_id
@@ -396,7 +396,7 @@ post service_list = salon_services
                     and exists![j: inset dom(single_salon_services)] | single_salon_services(j).id = salon_id
                       and response_message = "Http 200 Ok"
                 or
-                error_message = "Http 401, Permission Denied, Permission Denied"
+                error_message = "Http 401, Permission Denied"
                   => len(access_token) = 0
                     and access_token = nil
                       and exists![i: inset dom(salon_services)] | salon_services(i).id = category_id
@@ -427,7 +427,7 @@ post single_salon_services = override(~single_salon_services, {salon_service -> 
                   and salons_table(salon) = user
                     and user.role = <SALONOWNER>
       or
-        error_message = "Http 401, Permission Denied, Permission Denied"
+        error_message = "Http 401, Permission Denied"
           => len(access_token) = 0
             and access_token = nil
               and salons_table(salon) = user
