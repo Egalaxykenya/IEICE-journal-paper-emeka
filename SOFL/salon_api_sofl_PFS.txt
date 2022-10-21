@@ -11,25 +11,26 @@ UserRoles = {<SALONOWNER>, <SALONCUSTOMER>} /* Set enumerating user types in the
 User_Selection = {<owner>, <customer>}
 
 
-Salonuser = composed of
-            id = string
-            email = string
-            password = string
-            date_of_birth = DOB
-            nationality = string
-            city = string
-      end;
-
 var
+id: string
+email: string
+password: string
+date_of_birth: DOB
+nationality: string
+city: string
 role: UserRoles
-user: Salonuser
 
 inv
 
 len(id) == 36; /* define ids as of standard UUID string type with length of 36 characters */
 
 method Init()
-  post role = {} and user = mk_Salonuser(nil, nil, nil, nil, nil, nil)
+  post role = {} and id = " " and email = " " and password = " " and date_of_birth = nil and nationality = " " and city = " "
+
+end_method;
+
+method Set_SalonUserAttributes(id: string, email: string, password: string date_of_birth: DOB, nationality: string, city: string)
+    post id=id and email=email and password=password and date_of_birth=date_of_birth and nationality=nationality and city=city
 
 end_method;
 
@@ -190,20 +191,20 @@ inv
   Each user is unique and has a unique id
  */
 forall[i,j: inds(salon_services_categories)] | salon_services_categories(i) <> salon_services_categories(j) => salon_services_categories(i).id <> salon_services_categories(j).id;
-forall [i,j: inds(salon_users_table)] | salon_users_table(i).user <> salon_users_table(j).user => salon_users_table(i).user.id <> salon_users_table(i).user.id
+forall [i,j: inds(salon_users_table)] | salon_users_table(i) <> salon_users_table(j) => salon_users_table(i).id <> salon_users_table(j).id
 
 
 
 process CreateSalonUser(access_token: token, id: string, email: string, date_of_birth: DOB, password: string, nationality: string, city: string, role_selection: User_Selection ) salonuser: SalonUser, response_status: string | error_message: string
 ext wr salon_users_table
-pre not exists[i: inset salon_users_table] | get(i).user.id = id
+pre not exists[i: inset salon_users_table] | i.id = id
 explicit
   begin
     if access_token <> nil and elems(access_token) <> {}
     then
       salonuser := new SalonUser
-      salonuser := mk_Salonuser(id, email, password, date_of_birth, nationality, city)
-      salonuser.Set_SalonUserRole(role_selection)
+      salonuser := salonuser.SetSalonUserAttributes(id, email, password, date_of_birth, nationality, city)
+      salonuser := salonuser.Set_SalonUserRole(role_selection)
       salon_users_table := union(~salon_users_table, {salonuser})
       response_status := "Http 200 Ok"
     else
@@ -243,11 +244,10 @@ post exists![i: inset dom(salons_table)] | i.id = salon_id | i = salon | salons_
                 or error_message = "Http 403, Forbidden"
                     len(access_token) <> 0 
                       and access_token <> nil
-                        and salonuser inset(elems(salon_users_table))
-                          and salons_table(salon) = salonuser
-                            and salon.id = salon_id
-                                and salonuser.role <> <SALONOWNER>
-
+                        and exists![i: inset dom(salons_table)] | i.id = salon_id | salons_table(i) = salonuser and salonuser.role <> <SALONOWNER>
+                            and salonuser inset(elems(salon_users_table))
+                                and salon.id = salon_id
+                                        
 end_process;
 
 process RetrieveSalons(access_token: token, resource_path: string) salons: SalonTable, response_status: string | error_message: string
@@ -532,7 +532,7 @@ post exists![i: inset dom(single_salon_services)] | single_salon_services(i).id 
                             and salonuser.role = <SALONOWNER>
                                 and error_message = "Http 401, Permission Denied"
             or  
-                exists![i: inset dom(single_salon_services)] | single_salon_services(i).id = service_id
+                exists![i: inset dom(single_salon_services)] | i.id = service_id
                     and salon_service.id = service_id
                         and exists[j: inset dom(salons_table)] | j = salon and salons_table(j) = salonuser
                             and response_status = "Http 403, Forbidden"
@@ -617,11 +617,11 @@ post salon_customers_table = override(~salon_customers_table, {saloncustomer -> 
             or 
                 error_message = "Http 401, Permission Denied"
                   => len(access_token) = 0 
-                        and exists[i: inds(salon_users_table)] | salon_users_table(i) = salonuser | i.role = <SALONOWNER>
+                        and exists[i: inds(salon_users_table)] | salon_users_table(i) = salonuser | salon_users_table(i).role = <SALONOWNER>
                             and not exists[j: inset dom(salon_customers_table)] | j = saloncustomer and j.role = <SALONCUSTOMER> 
             or error_message = "Http 401, Permission Denied"
                   => access_token = nil 
-                        and exists[i: inds(salon_users_table)] | salon_users_table(i) = salonuser and salonuser.role = <SALONOWNER>
+                        and exists[i: inds(salon_users_table)] | salon_users_table(i) = salonuser | salon_users_table(i).role = <SALONOWNER>
                             and not exists[j: inset dom(salon_customers_table)] | j = saloncustomer and j.role = <SALONCUSTOMER> 
             or error_message = "Http 403, Forbidden"
                 => 
