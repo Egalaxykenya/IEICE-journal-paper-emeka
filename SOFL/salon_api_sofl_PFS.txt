@@ -242,7 +242,7 @@ post exists![i: inset dom(salons_table)] | i.id = salon_id | i = salon | salons_
                         and exists![i: inset dom(salons_table)] | i.id = salon_id | salons_table(i) = salonuser and salonuser.role = <SALONOWNER>
                             and salonuser inset(elems(salon_users_table))
                 or error_message = "Http 403, Forbidden"
-                    len(access_token) <> 0 
+                    => len(access_token) <> 0 
                       and access_token <> nil
                         and exists![i: inset dom(salons_table)] | i.id = salon_id | salons_table(i) = salonuser and salonuser.role <> <SALONOWNER>
                             and salonuser inset(elems(salon_users_table))
@@ -571,7 +571,7 @@ post not exists[i: inset dom(single_salon_services)] | i = deleted_service | i.l
             or  error_message = "Http 403, Forbidden"
                     => len(access_token) <> 0
                         and access_token <> nil
-                            exists[i: inset dom(single_salon_services)] | single_salon_services(i) = salon
+                            and exists[i: inset dom(single_salon_services)] | single_salon_services(i) = salon
                                 and salons_table(salon) = salonuser
                                     and salonuser.role <> <SALONOWNER>
 end_process;
