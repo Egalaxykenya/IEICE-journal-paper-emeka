@@ -59,8 +59,9 @@ method Init()
   post service_price = 0
 end_method;
 
-method validPrice(service_price: nat0) service_price: nat0
-  post (exists[x: nat0] | 0 < x <= 100000 and service_price = x)
+method validPrice(price: nat0) service_price: nat0
+  post service_price = price
+              and service_price > 0 and service_price <= 100000
 end_method;
 
 end_class;
@@ -191,8 +192,8 @@ inv
 /* Each salon category is unique
   Each user is unique and has a unique id
  */
-forall[i,j: inds(salon_services_categories)] | salon_services_categories(i) <> salon_services_categories(j) => salon_services_categories(i).id <> salon_services_categories(j).id;
-forall [i,j: inds(salon_users_table)] | salon_users_table(i) <> salon_users_table(j) => salon_users_table(i).id <> salon_users_table(j).id
+forall[i,j: inds(salon_services_categories)] | i <> j => salon_services_categories(i).id <> salon_services_categories(j).id;
+forall [i,j: inds(salon_users_table)] | i <> j => salon_users_table(i).id <> salon_users_table(j).id
 
 
 
