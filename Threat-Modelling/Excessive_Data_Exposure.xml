@@ -1,0 +1,31 @@
+<?xml version='1.0'?>
+<adtree>
+	<node refinement="conjunctive">
+		<label>Excessive Data
+Exposure</label>
+		<node refinement="conjunctive">
+			<label>API Responds with
+User Information and
+Other Users Private
+Information</label>
+			<node refinement="conjunctive">
+				<label>Registered API
+User</label>
+			</node>
+			<node refinement="conjunctive">
+				<label>Provide valid
+API Access Credentials</label>
+			</node>
+			<node refinement="conjunctive">
+				<label>Request for
+User Account Information</label>
+			</node>
+		</node>
+		<node refinement="conjunctive" switchRole="yes">
+			<label>Enforce Object Level Filtering</label>
+			<node refinement="conjunctive">
+				<label>Enforce Object Level Access Control</label>
+			</node>
+		</node>
+	</node>
+</adtree>

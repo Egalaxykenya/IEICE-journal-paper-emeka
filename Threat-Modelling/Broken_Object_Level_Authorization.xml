@@ -1,0 +1,30 @@
+<?xml version='1.0'?>
+<adtree>
+	<node refinement="conjunctive">
+		<label>Broken Object
+Level Authorization</label>
+		<node refinement="conjunctive">
+			<label>Unauthorized API
+Object Access</label>
+			<node refinement="conjunctive">
+				<label>Access Own
+API Objects</label>
+				<node refinement="conjunctive">
+					<label>Registered API User</label>
+				</node>
+				<node refinement="conjunctive">
+					<label>Valid API
+Access Credentials</label>
+				</node>
+			</node>
+			<node refinement="conjunctive">
+				<label>Access Other
+Users Private
+API Objects</label>
+			</node>
+		</node>
+		<node refinement="conjunctive" switchRole="yes">
+			<label>Enforce Object Level Access Control</label>
+		</node>
+	</node>
+</adtree>

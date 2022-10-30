@@ -1,0 +1,31 @@
+<?xml version='1.0'?>
+<adtree>
+	<node refinement="conjunctive">
+		<label>Verbose Informative
+Exception Messages</label>
+		<node refinement="conjunctive">
+			<label>Run an API service
+throwing an exception
+with verbose error messages</label>
+			<node refinement="conjunctive">
+				<label>Invoke a legitimate
+API service</label>
+				<node refinement="conjunctive">
+					<label>Registered API User</label>
+				</node>
+				<node refinement="conjunctive">
+					<label>Valid API
+Access Credentials</label>
+				</node>
+			</node>
+			<node refinement="conjunctive">
+				<label>Provide an input payload
+that throws an exception</label>
+			</node>
+		</node>
+		<node refinement="conjunctive" switchRole="yes">
+			<label>Provide generic response
+messages for API exceptions</label>
+		</node>
+	</node>
+</adtree>

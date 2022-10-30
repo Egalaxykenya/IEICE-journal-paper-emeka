@@ -1,0 +1,39 @@
+<?xml version='1.0'?>
+<adtree>
+	<node refinement="conjunctive">
+		<label>SQL Injection Attack</label>
+		<node refinement="conjunctive">
+			<label>Run a legitimate
+API service using
+malicious payload as input</label>
+			<node refinement="conjunctive">
+				<label>Invoke a legitimate
+API service that can
+create update or delete
+a resource</label>
+				<node refinement="conjunctive">
+					<label>Registered API User</label>
+				</node>
+				<node refinement="conjunctive">
+					<label>Valid API
+Access Credentials</label>
+				</node>
+			</node>
+			<node refinement="conjunctive">
+				<label>Provide a malicious
+API payload as input</label>
+			</node>
+		</node>
+		<node refinement="conjunctive" switchRole="yes">
+			<label>Sanitize or Validate Input</label>
+			<node refinement="conjunctive">
+				<label>Adopt Principle of Least Priority
+on HTTP methods with side effects</label>
+				<node refinement="conjunctive">
+					<label>Use prepared statements when using
+Raw SQL in API service business logic</label>
+				</node>
+			</node>
+		</node>
+	</node>
+</adtree>

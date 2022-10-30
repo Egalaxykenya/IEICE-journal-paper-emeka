@@ -1,0 +1,34 @@
+<?xml version='1.0'?>
+<adtree>
+	<node refinement="conjunctive">
+		<label>Broken Function
+Level Authorization</label>
+		<node refinement="conjunctive">
+			<label>Unauthorized Access
+to an API Functionality
+of Another Priviledged Role</label>
+			<node refinement="conjunctive">
+				<label>Access/Use API Functionality
+of User&apos;s role</label>
+				<node refinement="conjunctive">
+					<label>Registered API User</label>
+				</node>
+				<node refinement="conjunctive">
+					<label>Valid API
+Access Credentials</label>
+				</node>
+			</node>
+			<node refinement="conjunctive">
+				<label>Access/Use API functionality
+of another priviledged role</label>
+			</node>
+		</node>
+		<node refinement="conjunctive" switchRole="yes">
+			<label>Restrict Relevant HTTP methods
+for Specific User Roles</label>
+			<node refinement="conjunctive">
+				<label>Enforce Object Level Access Control</label>
+			</node>
+		</node>
+	</node>
+</adtree>
