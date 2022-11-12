@@ -742,7 +742,7 @@ post exists![i: inset dom(salon_bookings_table)] | i.id = booking_id and booking
                     and access_token <> nil
                       and booking inset dom(salon_bookings_table)
                         and salon_bookings_table(booking) = user
-                          and salon_bookings_table(boooking).role = <SALONCUSTOMER>
+                          and salon_bookings_table(booking).role = <SALONCUSTOMER>
                             and response_status = "Http 200 Ok"
             or
               len(access_token) = 0

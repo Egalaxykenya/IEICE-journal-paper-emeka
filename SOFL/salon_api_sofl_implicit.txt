@@ -26,7 +26,7 @@ inv
 len(id) == 36; /* define ids as of standard UUID string type with length of 36 characters */
 
 method Init()
-  post role = {} and id = " " and email = " " and password = " " and date_of_birth = nil and nationality = " " and city = " "
+  post id = " " and email = " " and password = " " and date_of_birth = nil and nationality = " " and city = " " and role = {}
 
 end_method;
 
@@ -173,17 +173,21 @@ SalonStylistData = composed of
 SalonTable = map SalonData to SalonUser;
 SalonServicesCategoriesTable = seq of SalonServiceCategoryData;
 SalonServiceTable = map SalonServiceData to SalonServiceCategoryData;
-SingleSalonServiceTable = map SalonServiceData to SalonData;
+MapSalonServiceToSalon = map SalonServiceData to SalonData;
+MapSalonServiceCategoryToSalon = map SalonServiceCategoryData to SalonData
+MapSalonCustomerToSalon =  map SalonUser to SalonData;
+MapSalonBookingsToCustomer = map SalonBookingData to SalonUser;
 
 var
 
 /* External data stores for salon records */
 #salons_table: SalonTable
 #salon_services: SalonServiceTable
-#single_salon_services: SingleSalonServiceTable
-#salon_services_categories: SalonServiceCategoriesTable
-#salon_customers_table: map SalonUser to SalonData;
-#salon_bookings_table: map SalonBookingData to SalonUser;
+#single_salon_services: MapSalonServiceToSalon
+#salon_services_categories: MapSalonServiceCategoryToSalon
+#service_categories: SalonServiceCategoriesTable
+#salon_customers_table: MapSalonCustomerToSalon
+#salon_bookings_table: MapSalonBookingsToCustomer
 #salon_stylist_table: map SalonStylistData to SalonData;
 #salon_users_table: seq of SalonUsers;
 
@@ -205,9 +209,9 @@ explicit
     if access_token <> nil and elems(access_token) <> {}
     then
       salonuser := new SalonUser
-      salonuser := salonuser.SetSalonUserAttributes(id, email, password, date_of_birth, nationality, city)
-      salonuser := salonuser.Set_SalonUserRole(role_selection)
-      salon_users_table := union(~salon_users_table, {salonuser})
+      salonuser.SetSalonUserAttributes(id, email, password, date_of_birth, nationality, city)
+      salonuser.Set_SalonUserRole(role_selection)
+      salon_users_table := conc(~salon_users_table, [salonuser])
       response_status := "Http 200 Ok"
     else
       error_message := "Http 401, Permission Denied"
@@ -224,7 +228,7 @@ pre exists[i: inset dom(salons_table)] | i.id = salon_id
                 and salons_table(i) = salonuser
                   and salonuser inset(elems(salon_users_table))
 
-post exists![i: inset dom(salons_table)] | i.id = salon_id | i = salon | salons_table(i) = salonuser  and salonuser.role = <SALONOWNER>
+post exists![i: inset dom(salons_table)] | i.id = salon_id and i = salon and salons_table(i) = salonuser  and salonuser.role = <SALONOWNER>
                 => len(access_token) <> 0
                       and access_token <> nil
                         and salonuser inset(elems(salon_users_table))
