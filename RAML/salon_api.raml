@@ -43,7 +43,7 @@ securitySchemes:
                 {
                   "id": "4567-dfgty-4456789ft",
                   "business_name": "Happy Paradise"
-                }
+                },
                 {
                   "id": "t678-3456-6789hgyt",
                   "business_name": "Women Heaven"
@@ -116,7 +116,7 @@ securitySchemes:
               type: shapes.Error
               example: {"error_message": "Not found"}
 
-/salons/{salon_id}/salon-services-categories:
+/salons/{salon_id}/service-categories:
   type: { collection: {response-type : shapes.SalonServicesCategoryData[], request-type : shapes.NewSalonServiceCategoryData}}
   is: [secured]
   get:
@@ -135,7 +135,7 @@ securitySchemes:
                 {
                   "id": "4567-dfgty-4456789ft",
                   "business_name": "Happy Paradise"
-                }
+                },
                 {
                   "id": "t678-3456-6789hgyt",
                   "business_name": "Women Heaven"
@@ -198,7 +198,7 @@ securitySchemes:
                         {
                           "id": "5677-dfgty-44ert89ft",
                           "service_name": "Hair Cut"
-                        }
+                        },
                         {
                           "id": "6768-3456-kh0yu56gyt",
                           "service_name": "Hair Coloring"
@@ -225,7 +225,7 @@ securitySchemes:
                 example: |
                   {"message": " New Service created successfully!"}
 
-/salons/{salon_id}/salon-services/{service_id}:
+/salons/{salon_id}/salon-services-categories/{category_id}/salon-services/{service_id}:
     type:
       {
         service:
@@ -273,6 +273,57 @@ securitySchemes:
               type: shapes.Error
               example: {"error_message": "Not found"}
 
+/salons/{salon_id}/salon-services-categories/{category_id}/salon-services/{service_id}/bookings:
+  type:  { collection: {response-type : shapes.SalonOnsiteBookingsData[], request-type : shapes.SalonOnsiteBookingsData } }
+    is: [secured]
+      get:
+        is: [pageable]
+          responses:
+            200:
+              body:
+                application/json:
+                  example:|
+                    {
+                      "bookings": [
+                        {
+                          "id": "38yu0-4tyu76-yy4578h",
+                          "salon_customer": "John",
+                          "booked_service": "Hair Cut"
+                        },
+                        {
+                          "id": "45tyy-0wer4r-55y78h",
+                          "salon_customer": "Vin",
+                          "booked_service": "Hair coloring"
+                        },
+                        {
+                          "id": "rter588y-46348e5-yvf329y9h",
+                          "salon_customer": "Sally",
+                          "booked_service": "Hair Coloring"
+                        }
+                      ]
+                  }
+
+    post:
+      is: [secured]
+        description: |
+          salon booking created successfully
+        queryParameters:
+          access_token: string
+          salon_customer: shapes.SalonCustomerData.id
+          booked_in_by: shapes.UserData.id
+          stylists: shapes.SalonStylistData.id
+          booked_service: shapes.SalonServicesData.id
+          booking_creation_date: datetime
+          service_date: datetime
+        body:
+          type: shapes.SalonOnsiteBookingsData
+            responses:
+              200:
+                body:
+                  application/json:
+                    example: |
+                      {"message": " New booking created successfully!"}
+
 /salons/{salon_id}/customers:
   type:  { collection: {response-type : shapes.SalonCustomerData[], request-type : shapes.SalonCustomerData } }
   is: [secured]
@@ -294,7 +345,7 @@ securitySchemes:
                       "id": "ttf8y-05645e5-yyxfty78h",
                       "first_name": "John",
                       "last_name": "Kisaki"
-                      }
+                      },
                       {
                       "id": "456t8y-456tyue5-yyr456tyh",
                       "first_name": "Kim",
@@ -398,7 +449,7 @@ securitySchemes:
                       "id": "88tyy-0564r-5567ty78h",
                       "salon_customer": "John",
                       "booked_service": "Hair coloring"
-                      }
+                      },
                       {
                       "id": "6788y-4678e5-yvfgty89h",
                       "salon_customer": "Kim",
@@ -428,7 +479,7 @@ securitySchemes:
                     example: |
                       {"message": " New booking created successfully!"}
 
-  /salons/{user_id}/bookings/{booking_id}:
+  /salons/{customer_id}/bookings/{booking_id}:
     type:
       {
         booking:
@@ -475,6 +526,61 @@ securitySchemes:
               type: shapes.Error
               example: {"error_message": "Not found"}
 
+/salons/{salon_id}/booking-payments:
+  type:  { collection: {response-type : shapes.SalonBookingsPaymentsData[], request-type : shapes.SalonBookingsPaymentsData } }
+  is: [secured]
+    get:
+      is: [pageable]
+        responses:
+          200:
+            body:
+              application/json:
+                example:|
+                  {
+                    "salonbookingpayments": [
+                      {
+                        "id": "45345-yytrt76-9878hyrt",
+                        "salon": shapes.SalonData.business_name,
+                        "payment_received_by": shapes.UserData.first_name,
+                        "service_paid_for": shapes.SalonServicesData.service_name,
+
+                      },
+                      {
+                      "id": "34565-zzrtt76-987578rt",
+                        "salon": shapes.SalonData.business_name,
+                        "payment_received_by": shapes.UserData.first_name,
+                        "service_paid_for": shapes.SalonServicesData.service_name,
+                      },
+                      {
+                      "id": "xfgsd55-yytr677-t7yx6-9878hyrt",
+                        "salon": shapes.SalonData.business_name,
+                        "payment_received_by": shapes.UserData.first_name,
+                        "service_paid_for": shapes.SalonServicesData.service_name,
+                      }
+                      ]
+                  }
+
+    post:
+      is: [secured]
+        description: |
+          salon booking payment created successfully
+        queryParameters:
+          access_token: string
+          salon: shapes.SalonData.id
+          payment_recieved_by: shapes.UserData.id
+          service_paid_for: shapes.SalonServicesData.id
+          payment_option: string
+          payment_code: string
+          payment_date: datetime
+        body:
+          type: shapes.SalonBookingsPaymentsData
+            responses:
+              200:
+                body:
+                  application/json:
+                    example: |
+                      {"message": " New salon booking payment created successfully!"}
+
 /salons/{salon_id}/stylists:
   type:  { collection: {response-type : shapes.SalonStylistData[], request-type : shapes.SalonStylistData } }
   is: [secured]
@@ -496,7 +602,7 @@ securitySchemes:
                       "id": "8856y-fgrt4r-5567t4378h",
                       "first_name": "John",
                       "last_name": "Hair coloring"
-                      }
+                      },
                       {
                       "id": "747rt-4785e5-345yty67h",
                       "first_name": "Kim",
@@ -590,3 +696,106 @@ securitySchemes:
             application/json:
               type: shapes.Error
               example: {"error_message": "Not found"}
+
+/salons/{salon_id}/stylists/{stylist_id}/bookings:
+  type:  { collection: {response-type : shapes.SalonOnsiteBookingsData[], request-type : shapes.SalonOnsiteBookingsData } }
+      is: [secured]
+    get:
+      is: [pageable]
+        responses:
+          200:
+            body:
+              application/json:
+                example:|
+                  {
+                    "salononsitebookings": [
+                      {
+                        "id": "7776yu0-45rtey76-y675478h",
+                        "stylists": shapes.SalonStylistData[],
+                        "salon_customer": shapes.SalonCustomerData.first_name,
+                        "booked_service": shapes.SalonServicesData.service_name,
+                      },
+                      {
+                        "id": "2453yu0-2345676-y67tes78h",
+                        "stylists": shapes.SalonStylistData[],
+                        "salon_customer": shapes.SalonCustomerData.first_name,
+                        "booked_service": shapes.SalonServicesData.service_name,
+                      },
+                      {
+                        "id": "4563-xyz-7yu0-45676-y675478h",
+                        "stylists": shapes.SalonStylistData[],
+                        "salon_customer": shapes.SalonCustomerData.first_name,
+                        "booked_service": shapes.SalonServicesData.service_name,
+                      }
+                    ]
+                  }
+
+    post:
+      is: [secured]
+        description: |
+          Create a salon booking
+        queryParameters:
+          access_token: string
+          salon_customer: shapes.SalonCustomerData.id
+          booked_in_by: shapes.UserData.id
+          stylists: shapes.SalonStylistsData[]
+          booked_service: shapes.SalonServicesData.id
+          booking_creation_date: datetime
+          service_date: datetime
+        body:
+          type: shapes.UserData
+            responses:
+              200:
+                body:
+                  application/json:
+                    example: |
+                      {"message": " New salon booking created successfully!"}
+
+/salons/{salon_id}/users:
+    type:  { collection: {response-type : shapes.UserData[], request-type : shapes.UserData } }
+      is: [secured]
+    get:
+      is: [pageable]
+        responses:
+          200:
+            body:
+              application/json:
+                example:|
+                  {
+                    "users": [
+                      {
+                        "id": "3456yu0-45676-y675478h",
+                        "email": "terry@gmail.com",
+                        "phone_number": "0803456788"
+                      },
+                      {
+                      "id": "zzz34ry-fgr678-5578h",
+                      "email": "mayo@yahoo.com",
+                      "phone_number": "0703456786"
+                      },
+                      {
+                      "id": "3456rt-4ertye5-345yty67h",
+                      "email": "kimkim@gmail.com",
+                      "phone_number": "08034567865"
+                      }
+                      ]
+                  }
+
+    post:
+      is: [secured]
+        description: |
+          Create a salon user
+        queryParameters:
+          access_token: string
+          owner: shapes.UserData.id
+          email: string
+          password: string
+          phone_number: string
+        body:
+          type: shapes.UserData
+            responses:
+              200:
+                body:
+                  application/json:
+                    example: |
+                      {"message": " New user created successfully!"}

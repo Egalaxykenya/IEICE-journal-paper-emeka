@@ -53,7 +53,7 @@ def CreateNodeTuples(new_nested_node_list):
 graph_tupled_node_list = CreateNodeTuples(new_nested_node_list)
 
 def PlotDomainModelGraph(graph_tupled_node_list):
-    G = nx.Graph()
+    G = nx.DiGraph()
     G.add_edges_from(graph_tupled_node_list)
     nx.draw(G, with_labels=True)
     plt.show()
