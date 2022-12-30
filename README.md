@@ -15,7 +15,7 @@ Contains a python implementation of our API resource graph generation and RESTfu
 * _matplotlib version 3.5.2_ library installed
 * _matplotlib-inline version 0.1.3_ library installed
 
-To run the graph generation script, execute the python script in your terminal:
+To run the graph generation script, execute the python script in your terminal with the _api_resources.txt_ being in your root directory:
 ```
 python salongraph.py 
 ```
@@ -23,7 +23,7 @@ python salongraph.py
 Contains RAML Abstract Syntax Tree generator source files for extracting RESTful API url resource list. Requires you to have your nodejs environment set up. Details on how to set it up and get running can be accessed from this project repository: https://github.com/raml-org/raml-java-parser
 
 ## case_study_sources
-Not required for this journal paper therefore can be safely ignored. The scope of the journal paper is limited to SOFL specification generation. However, it contains a minimal Django implementation of some of the API end points.
+Not required for this journal paper therefore can be safely ignored. The scope of the journal paper is limited to SOFL specification generation. However, this folder contains a minimal Django implementation of some of the API end points.
 
 ## DDD-and-Ecore
 Contains case study source materials for our proposed approach, case study online salon booking system domain model and metamodel. We use Drawio tool to generate the PDF files for the domain model and metamodel.

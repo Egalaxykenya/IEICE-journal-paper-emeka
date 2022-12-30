@@ -47,6 +47,31 @@ end_method
 
 end_class;
 
+class BioDescription;
+
+var
+bio_description: string
+invalid_chars: string
+inv
+0 < len(bio_description) <= 100
+
+method Init()
+  post bio_description = Nil
+  invalid_chars = ['<','>', ';', '&', '#', '=','/', '\', '%']
+end_method;
+
+method Set_Bio_Description(bio_description: string)
+  post bio_description = bio_description
+end_method;
+
+method validBioRegex(invalid_chars: string, bio_description: string) is_valid: boolean
+/* This method tests for existence of invalid characters in the provided bio_description string */
+  pre elems(invalid_chars) <> {}
+  post is_valid = true and inter(elems(invalid_chars), elems(bio_description)) = {} or 
+        is_valid = false and inter(elems(invalid_chars), elems(bio_descriotion)) <> {}
+end_method;
+
+end_class;
 
 class Price;
 
@@ -107,6 +132,15 @@ SalonData = composed of
               price_range = string
               created = Timestamp
             end;
+
+SalonCustomerProfile = composed of
+                id = string
+                user = SalonUser
+                name = string
+                phone_number = string
+                bio_description = BioDescription
+              end;
+
 
 SalonServiceCategoryData = composed of
                             id = nat0
@@ -177,6 +211,7 @@ MapSalonServiceToSalon = map SalonServiceData to SalonData;
 MapSalonServiceCategoryToSalon = map SalonServiceCategoryData to SalonData
 MapSalonCustomerToSalon =  map SalonUser to SalonData;
 MapSalonBookingsToCustomer = map SalonBookingData to SalonUser;
+MapSalonCustomerProfileToSalonUser = map SalonCustomerProfile to SalonUser;
 
 var
 
@@ -190,6 +225,7 @@ var
 #salon_bookings_table: MapSalonBookingsToCustomer
 #salon_stylist_table: map SalonStylistData to SalonData;
 #salon_users_table: seq of SalonUsers;
+#salon_customer_profile: MapSalonCustomerProfileToSalonUser
 
 
 inv
@@ -218,6 +254,27 @@ explicit
   end
 end_process;
 
+process CreateSalonCustomerProfile(access_token, id: string, user: SalonUser, name: string, phone_number: string, bio_description: BioDescription, bio: string) customer_profile: SalonCustomerProfile, error_message: string
+ext rd salon_users_table
+ext wr salon_customer_profile
+pre not exists[i: inset dom(salon_customer_profile)] | i.id = id
+
+explicit
+  begin
+    if access_token <> nil and elems(access_token) <> {}
+    then 
+      bio_description := new BioDescription
+      validbio = bio_description.validBioRegex(bio)
+      if validbio = true and user inset(elems(salon_users_table))
+        then bio_description.Set_Bio_Description(bio)
+          customer_profile = mk_SalonCustomerProfile(id, user, name, phone_number, bio_description)
+          ~salon_customer_profile = override(salon_customer_profile, {customer_profile -> user})
+      else error_message := "Bio description contains invalid characters";
+    else error_message := "Http 402, Permission Denied".
+
+  end
+
+end_process
 
 process RetrieveSalon(access_token: token, salon_id: string, salonuser: SalonUser) salon: SalonData, response_status: string | error_message: string
 /* API resource path: /salons/{salon_id} */
